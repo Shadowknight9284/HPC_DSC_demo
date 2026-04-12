@@ -10,12 +10,10 @@
 set -euo pipefail
 
 hostname
-python --version
+python3 --version
 
-# If you use conda or a module system on iLab, activate it here.
-# Example:
-# source ~/miniconda3/etc/profile.d/conda.sh
-# conda activate myenv
+# Activate your env
+source $HOME/hpc_demo_env/bin/activate
 
 python hyperparam_demo.py --n-jobs 1 --out results_serial.json
 python hyperparam_demo.py --n-jobs ${SLURM_CPUS_PER_TASK} --out results_parallel.json
@@ -27,7 +25,7 @@ from pathlib import Path
 serial = json.loads(Path('results_serial.json').read_text())
 parallel = json.loads(Path('results_parallel.json').read_text())
 speedup = serial['elapsed_seconds'] / parallel['elapsed_seconds']
-print('\n=== SUMMARY ===')
+print("\n=== SUMMARY ===")
 print(f"Serial time:   {serial['elapsed_seconds']:.2f}s")
 print(f"Parallel time: {parallel['elapsed_seconds']:.2f}s")
 print(f"Speedup:       {speedup:.2f}x")
